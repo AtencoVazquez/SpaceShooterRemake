@@ -86,6 +86,11 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    private void OnBecameInvisible()
+    {
+        Destroy(this.gameObject);
+    }
+
     IEnumerator ShootTimer()
     {
         yield return new WaitForSeconds(2.5f);

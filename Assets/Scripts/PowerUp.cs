@@ -23,7 +23,7 @@ public class PowerUp : MonoBehaviour
             switch (identifier)
             {
                 case (int)PowerUps.shield:
-                    tempPlayerCtrl.ActivateShield();
+                    tempPlayerCtrl.EnableShieldActivation();
                     break;
                 case (int)PowerUps.speedUp:
                     tempPlayerCtrl.IncreaseSpeed();

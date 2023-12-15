@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
     {
         Move();
         Shoot();
-        
+        //ActivateShield();
     }
 
     private void Move()
@@ -77,12 +77,12 @@ public class PlayerController : MonoBehaviour
 
     private void Shoot()
     {
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && IsTripleShotActive == false)
+        if (Input.GetMouseButtonDown(0) && !IsTripleShotActive)
         {
             LaserController tempLaserCtrl = Instantiate(laserShot, cannonPoints[0].transform.position, Quaternion.identity).GetComponent<LaserController>();
             tempLaserCtrl.Direction = Vector2.up;
         }
-        else if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && IsTripleShotActive == true)
+        else if (Input.GetMouseButtonDown(0) && IsTripleShotActive)
         {
             for (int i = 0; i < cannonPoints.Length; i++)
             {
@@ -92,11 +92,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void ActivateShield()
+    //private void ActivateShield()
+    //{
+    //    if (IsShieldActive && Input.GetKeyDown(KeyCode.Space))
+    //    {
+    //        Transform shieldTransform = Instantiate(shield, playerTransform.position, Quaternion.identity).GetComponent<Transform>();
+    //        shieldTransform.parent = playerTransform;
+
+    //        if (Input.GetKeyDown(KeyCode.Space))
+    //        {
+    //            IsShieldActive = false;
+    //        }
+    //    }
+        
+    //}
+
+    public void EnableShieldActivation()
     {
         IsShieldActive = true;
-        Transform shieldTransform = Instantiate(shield, playerTransform.position, Quaternion.identity).GetComponent<Transform>();
-        shieldTransform.parent = playerTransform;
     }
     public void IncreaseSpeed()
     {
