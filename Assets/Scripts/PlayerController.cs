@@ -5,15 +5,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    //Player movement
-    [Header("Player movement")]
     [SerializeField] private float moveSpeed;
+    private int iDHorzVelocity;
 
     private Rigidbody2D playerRB;
     private Transform playerTransform;
+    private Transform cannonPoint;
     private Animator playerAnimator;
-
-    private int iDHorzVelocity;
+    [SerializeField] private GameObject laserShot;
 
     private float screenBoundLeft, screenBoundRight, screenBoundUp, screenBoundDown;
     private const float horzSpriteOffset = 0.7f, vertSpriteOffset = 0.75f;
@@ -29,6 +28,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        cannonPoint = GameObject.Find("CannonPoint").GetComponent<Transform>();
+
         screenBoundLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
         screenBoundRight = Camera.main.orthographicSize * Camera.main.aspect;
         screenBoundUp = Camera.main.orthographicSize;
@@ -41,6 +42,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         Move();
+        Shoot();
         
     }
 
@@ -61,5 +63,16 @@ public class PlayerController : MonoBehaviour
             playerTransform.position = new Vector2(playerTransform.position.x, screenBoundDown + vertSpriteOffset);
         else if (playerTransform.position.y > screenBoundUp - vertSpriteOffset)
             playerTransform.position = new Vector2(playerTransform.position.x, screenBoundUp - vertSpriteOffset);
+    }
+
+    private void Shoot()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+        {
+            LaserController tempLaserCtrl = Instantiate(laserShot, cannonPoint.transform.position, Quaternion.identity).GetComponent<LaserController>();
+            tempLaserCtrl.Direction = Vector2.up;
+            
+        }
+        
     }
 }
