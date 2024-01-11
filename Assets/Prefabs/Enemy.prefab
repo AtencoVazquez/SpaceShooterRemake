@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 2164150288430043214}
   - component: {fileID: 2267277642271872221}
   - component: {fileID: 1209014086642256209}
-  - component: {fileID: 7306925920924162693}
+  - component: {fileID: -6678755762801997418}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -306,6 +306,10 @@ MonoBehaviour:
   - {fileID: 734296148552368106}
   - {fileID: 8835138990077144064}
   laserPrefab: {fileID: 7520708725274537249, guid: 588b0ee25ff1af24e826c8e355c5cc4b, type: 3}
+  powerUpPrefabs:
+  - {fileID: 6221770383054781372, guid: 7143eb13a2db1fb4287c76c8e31f65c7, type: 3}
+  - {fileID: 815234679330081757, guid: 14c8ebfa2b3646e4fac271f3c9eb1aa0, type: 3}
+  - {fileID: 291178698161225658, guid: cdbc53a042aeebf44b407b56f32ef72b, type: 3}
   moveSpeed: 3.5
 --- !u!61 &2267277642271872221
 BoxCollider2D:
@@ -379,7 +383,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!95 &7306925920924162693
+--- !u!95 &-6678755762801997418
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0

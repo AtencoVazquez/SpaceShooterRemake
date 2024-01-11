@@ -12,6 +12,12 @@ public enum PowerUps
 public class PowerUp : MonoBehaviour
 {
     [SerializeField] private int identifier;
+    [SerializeField] private float lifeTime;
+
+    private void Start()
+    {
+        Destroy(this.gameObject, lifeTime);
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -38,4 +44,5 @@ public class PowerUp : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
+
 }

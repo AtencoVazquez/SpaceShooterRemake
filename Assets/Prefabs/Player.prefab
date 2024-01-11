@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 302064983677493427}
   - component: {fileID: 8132574089343076592}
   - component: {fileID: 4998769416181442988}
-  - component: {fileID: 3491808103493892750}
+  - component: {fileID: -2725431376808358009}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -212,18 +212,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2345860c46991f343a0b820e54488d8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0
   baseSpeed: 5
-  speedMultiplier: 1.5
-  speedUpTime: 3.5
+  speedMultiplier: 1.2
+  speedUpTime: 5
   _isTripleShotActive: 0
   _enableShieldActivation: 0
-  _isSpeedUpActive: 0
-  _totalShieldTime: 0
+  _enableSpeedUp: 0
   _healthPoints: 5
   laserShotGO: {fileID: 7520708725274537249, guid: 588b0ee25ff1af24e826c8e355c5cc4b, type: 3}
   thrusterGO: {fileID: 6173170160920925112}
---- !u!95 &3491808103493892750
+--- !u!95 &-2725431376808358009
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0

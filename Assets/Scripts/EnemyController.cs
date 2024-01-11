@@ -14,6 +14,7 @@ public class EnemyController : MonoBehaviour
     private CannonPoint[] cannonPoints;
     [SerializeField] private GameObject[] thrustersGO;
     [SerializeField] private GameObject laserPrefab;
+    [SerializeField] private GameObject[] powerUpPrefabs;
     private GameObject shieldGO;
 
     private int _healthPoints;
@@ -21,8 +22,10 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float moveSpeed;
     private float[] tripleShotProbabilities = {0.7f, 0.3f};
     private float[] activateShieldProbabilities = { 0.2f, 0.8f };
+    private float[] powerUpDropProbabilities = { 0.15f, 0.15f, 0.15f, 0.55f };
     private int shootProbability;
     private int activateShieldProbability;
+    private int powerUpDropProbability;
     private bool canMove;
     private bool canShoot;
     private bool canTripleShot;
@@ -42,6 +45,7 @@ public class EnemyController : MonoBehaviour
 
         shootProbability = (int)RandomValueProbabilities.GenerateValueWithProbabilities(tripleShotProbabilities);
         activateShieldProbability = (int)RandomValueProbabilities.GenerateValueWithProbabilities(activateShieldProbabilities);
+        powerUpDropProbability = (int)RandomValueProbabilities.GenerateValueWithProbabilities(powerUpDropProbabilities);
         
 
         if (shootProbability == 1)
@@ -53,6 +57,8 @@ public class EnemyController : MonoBehaviour
             canActivateShield = false;
         else
             canActivateShield = true;
+
+        
 
     }
 
@@ -171,6 +177,22 @@ public class EnemyController : MonoBehaviour
         StopAllCoroutines();
         enemyBC.enabled = false;
         canMove = false;
+
+        switch (powerUpDropProbability)
+        {
+            case (int)PowerUps.shield:
+                Instantiate(powerUpPrefabs[(int)PowerUps.shield], enemyTransform.position, Quaternion.identity);
+                break;
+            case (int)PowerUps.speedUp:
+                Instantiate(powerUpPrefabs[(int)PowerUps.speedUp], enemyTransform.position, Quaternion.identity);
+                break;
+            case (int)PowerUps.tripleShot:
+                Instantiate(powerUpPrefabs[(int)PowerUps.tripleShot], enemyTransform.position, Quaternion.identity);
+                break;
+            default:
+                break;
+        }
+
         enemyAnim.SetTrigger(iDExplosionTrigger);
         Destroy(this.gameObject, 3.2f);
     }

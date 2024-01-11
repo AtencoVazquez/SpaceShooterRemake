@@ -5,17 +5,18 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed;
+    private float moveSpeed;
     [SerializeField] private float baseSpeed;
     [SerializeField] private float speedMultiplier;
     [SerializeField] private float speedUpTime;
     [SerializeField] private bool _isTripleShotActive;
     [SerializeField] private bool _enableShieldActivation;
-    [SerializeField] private bool _isSpeedUpActive;
+    [SerializeField] private bool _enableSpeedUp;
     private bool isShieldActive;
     private bool enableMovement;
-    [SerializeField] private float _totalShieldTime;
-    private float currentShieldTime;
+    private bool enableShooting;
+    private float _totalShieldTime;
+    //private float currentShieldTime;
     [SerializeField] private int _healthPoints;
     
     private int iDHorzVelocity;
@@ -38,13 +39,12 @@ public class PlayerController : MonoBehaviour
 
     public bool IsTripleShotActive { get => _isTripleShotActive; set => _isTripleShotActive = value; }
     public bool EnableShieldActivation { get => _enableShieldActivation; set => _enableShieldActivation = value; }
-    public bool IsSpeedUpActive { get => _isSpeedUpActive; set => _isSpeedUpActive = value; }
+    public bool EnableSpeedUp { get => _enableSpeedUp; set => _enableSpeedUp = value; }
     public float TotalShieldTime { get => _totalShieldTime; set => _totalShieldTime = value; }
     public int HealthPoints { get => _healthPoints; set => _healthPoints = value; }
 
     private void Awake()
     {
-        moveSpeed = baseSpeed;
         playerTransform = GetComponent<Transform>();
         playerRB = GetComponent<Rigidbody2D>();
         playerAnimator = GetComponent<Animator>();
@@ -62,6 +62,7 @@ public class PlayerController : MonoBehaviour
         screenBoundDown = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).y;
 
         enableMovement = true;
+        enableShooting = true;
 
         iDHorzVelocity = Animator.StringToHash("HorzVelocity");
         iDExplosionTrigger = Animator.StringToHash("ExplosionTrigger");
@@ -83,6 +84,15 @@ public class PlayerController : MonoBehaviour
     {
         if (enableMovement)
         {
+            if (EnableSpeedUp)
+            {
+                moveSpeed = baseSpeed * speedMultiplier;
+            }
+            else
+            {
+                moveSpeed = baseSpeed;
+            }
+
             float inputX = Input.GetAxisRaw("Horizontal") * moveSpeed;
             float inputY = Input.GetAxisRaw("Vertical") * moveSpeed;
 
@@ -107,19 +117,24 @@ public class PlayerController : MonoBehaviour
 
     private void Shoot()
     {
-        if (Input.GetMouseButtonDown(0) && !IsTripleShotActive)
+        if (enableShooting)
         {
-            GameObject tempLaserGO = Instantiate(laserShotGO, cannonPoints[0].transform.position, Quaternion.identity);
-            LaserController tempLaserCtrl = tempLaserGO.GetComponent<LaserController>();
-            tempLaserCtrl.Direction = Vector2.up;
-        }
-        else if (Input.GetMouseButtonDown(0) && IsTripleShotActive)
-        {
-            for (int i = 0; i < cannonPoints.Length; i++)
+            if (Input.GetMouseButtonDown(0) && !IsTripleShotActive)
             {
-                GameObject tempLaserGO = Instantiate(laserShotGO, cannonPoints[i].transform.position, Quaternion.identity);
+                Vector2 laserPosition = new Vector2(cannonPoints[0].transform.position.x, cannonPoints[0].transform.position.y + 0.7f);
+                GameObject tempLaserGO = Instantiate(laserShotGO, laserPosition, Quaternion.identity);
                 LaserController tempLaserCtrl = tempLaserGO.GetComponent<LaserController>();
                 tempLaserCtrl.Direction = Vector2.up;
+            }
+            else if (Input.GetMouseButtonDown(0) && IsTripleShotActive)
+            {
+                for (int i = 0; i < cannonPoints.Length; i++)
+                {
+                    Vector2 laserPosition = new Vector2(cannonPoints[i].transform.position.x, cannonPoints[i].transform.position.y + 0.7f);
+                    GameObject tempLaserGO = Instantiate(laserShotGO, laserPosition, Quaternion.identity);
+                    LaserController tempLaserCtrl = tempLaserGO.GetComponent<LaserController>();
+                    tempLaserCtrl.Direction = Vector2.up;
+                }
             }
         }
     }
@@ -156,7 +171,6 @@ public class PlayerController : MonoBehaviour
 
     public void IncreaseSpeed()
     {
-        IsSpeedUpActive = true;
         StartCoroutine(SpeedUpTimer(speedUpTime));
     }
 
@@ -167,10 +181,9 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator SpeedUpTimer(float speedUpDuration)
     {
-        moveSpeed = baseSpeed * speedMultiplier;
+        EnableSpeedUp = true; 
         yield return new WaitForSeconds(speedUpDuration);
-        moveSpeed = baseSpeed;
-        IsSpeedUpActive = false;
+        EnableSpeedUp = false;
     }
 
     IEnumerator ShieldActiveTime()
@@ -182,7 +195,7 @@ public class PlayerController : MonoBehaviour
             if (isShieldActive)
             {
                 elapsedTime += Time.deltaTime;
-                currentShieldTime = elapsedTime;
+                //currentShieldTime = elapsedTime;
             }
             
             yield return null;
@@ -212,6 +225,11 @@ public class PlayerController : MonoBehaviour
 
     public void DamageCalculation()
     {
+        if (IsTripleShotActive)
+        {
+            IsTripleShotActive = false;
+        }
+
         if (!isShieldActive)
             HealthPoints--;
 
@@ -227,6 +245,7 @@ public class PlayerController : MonoBehaviour
     private void DestroyPlayer()
     {
         enableMovement = false;
+        enableShooting = false;
 
         for (int i = 0; i < cannonPoints.Length; i++)
         {
