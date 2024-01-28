@@ -35,6 +35,12 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnEnemyShips());
     }
 
+    public void StopSpawningEnemyShips()
+    {
+        StopEnemySpawning = true;
+        StopCoroutine(SpawnEnemyShips());
+    }
+
     private float GenerateRandomPosition(float minValue, float maxValue)
     {
         float randomPosition;

@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private Animator playerAnimator;
     private CapsuleCollider2D playerCapCol;
 
+    private GameManager gameManager;
     [SerializeField] private GameObject laserShotGO;
     private GameObject shieldGO;
     private CannonPoint[] cannonPoints;
@@ -54,6 +55,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.FindObjectOfType<GameManager>();
         cannonPoints = this.GetComponentsInChildren<CannonPoint>();
         shieldGO = this.GetComponentInChildren<ShieldController>(true).gameObject;
         screenBoundLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
@@ -218,14 +220,14 @@ public class PlayerController : MonoBehaviour
         {
             EnemyController tempEnemyCtrl = collision.GetComponent<EnemyController>();
             tempEnemyCtrl.DestroyEnemy();
-            Destroy(this.gameObject);
+            DestroyPlayer();
         }
         
     }
 
     public void DamageCalculation()
     {
-        if (IsTripleShotActive)
+        if (IsTripleShotActive && !isShieldActive)
         {
             IsTripleShotActive = false;
         }
@@ -244,6 +246,8 @@ public class PlayerController : MonoBehaviour
 
     private void DestroyPlayer()
     {
+        gameManager.GameOver();
+
         enableMovement = false;
         enableShooting = false;
 
